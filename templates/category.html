@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   {% if category %}
+      {{category.description | truncatewords:155}}
+   {% else %}
+       welcome to najiz cosmetic store,where you can buy different items....
+   {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+    {{category.name}}-Najiz Cosmetics
+  {% else %}
+      See our New Collection -Najiz Cosmetics
+  {% endif%}
+{% endblock %}
+
+{% block content %}
+
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto">
+            <p><a href="{% url 'ecommerce_app:allprodcat' %}">"Our Products Collection"</a> </p>
+        </div>
+
+    </div>
+</div>
+  {% endif %}
+<div class="mx-auto">
+    {% if category %}
+       <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+     <br>
+<div>
+       <h1 class="text-center my_title">{{category.name}}</h1>
+       <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png'%}" height="300" width="1300" alt="Our Products">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">Our Products Collections</h1>
+    <p class="text-justify">No one shall be subjected to arbitrary arrest, detention or exile. Everyone is entitled in full equality to a fair and public hearing by an independent and impartial tribunal, in the determination of his rights and obligations and of any criminal charge against him. No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks. </p>
+</div>
+  {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width=20rem;">
+                <a href="{{product.get_url}}"><img  src="{{product.image.url}}"> </a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                 <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
